@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1051162490029",
+    "project_id": "pixwall-e8287",
+    "storage_bucket": "pixwall-e8287.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051162490029:android:02e60efa4c05f24d2d4224",
+        "android_client_info": {
+          "package_name": "com.example.pix_wall"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5NrX_45SSepj-vOkUsSqAkkhznQn44C8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
