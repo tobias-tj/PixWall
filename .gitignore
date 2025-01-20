@@ -43,3 +43,26 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+# iOS-specific
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/.symlinks/
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/Runner.xcodeproj/project.xcworkspace/
+
+# Android-specific
+android/.gradle/
+android/app/proguard-rules.pro
+android/local.properties
+android/app/build/
+
+
+# macOS
+.DS_Store
+
+# Linux
+**/linux/flutter/ephemeral/
