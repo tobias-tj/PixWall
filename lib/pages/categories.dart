@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pix_wall/pages/all_wallpaper.dart';
 
 class Categories extends StatefulWidget {
   const Categories({super.key});
@@ -29,152 +30,192 @@ class _CategoriesState extends State<Categories> {
               SizedBox(
                 height: 20.0,
               ),
-              Container(
-                margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                width: MediaQuery.of(context).size.width,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        "images/wallpaper1.jpg",
-                        width: MediaQuery.of(context).size.width,
-                        height: 180,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        color: Colors.black26,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AllWallpaper(category: "Ocean")));
+                },
+                child: Container(
+                  margin:
+                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                  width: MediaQuery.of(context).size.width,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Ocean",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'BeVietnamPro',
-                              fontSize: 28.0,
-                              fontWeight: FontWeight.bold),
+                        child: Image.asset(
+                          "images/wallpaper1.jpg",
+                          width: MediaQuery.of(context).size.width,
+                          height: 180,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Ocean",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'BeVietnamPro',
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                width: MediaQuery.of(context).size.width,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        "images/wallpaper3.jpg",
-                        width: MediaQuery.of(context).size.width,
-                        height: 180,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        color: Colors.black26,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AllWallpaper(category: "Mountains")));
+                },
+                child: Container(
+                  margin:
+                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                  width: MediaQuery.of(context).size.width,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Mountains",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'BeVietnamPro',
-                              fontSize: 28.0,
-                              fontWeight: FontWeight.bold),
+                        child: Image.asset(
+                          "images/wallpaper3.jpg",
+                          width: MediaQuery.of(context).size.width,
+                          height: 180,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Mountains",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'BeVietnamPro',
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                width: MediaQuery.of(context).size.width,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        "images/categoryAnimal.jpg",
-                        width: MediaQuery.of(context).size.width,
-                        height: 180,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        color: Colors.black26,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AllWallpaper(category: "Animals")));
+                },
+                child: Container(
+                  margin:
+                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                  width: MediaQuery.of(context).size.width,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Animals",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'BeVietnamPro',
-                              fontSize: 28.0,
-                              fontWeight: FontWeight.bold),
+                        child: Image.asset(
+                          "images/categoryAnimal.jpg",
+                          width: MediaQuery.of(context).size.width,
+                          height: 180,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Animals",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'BeVietnamPro',
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                width: MediaQuery.of(context).size.width,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        "images/categoryTravels.jpg",
-                        width: MediaQuery.of(context).size.width,
-                        height: 180,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        color: Colors.black26,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AllWallpaper(category: "Travels")));
+                },
+                child: Container(
+                  margin:
+                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                  width: MediaQuery.of(context).size.width,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Travels",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'BeVietnamPro',
-                              fontSize: 28.0,
-                              fontWeight: FontWeight.bold),
+                        child: Image.asset(
+                          "images/categoryTravels.jpg",
+                          width: MediaQuery.of(context).size.width,
+                          height: 180,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Travels",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'BeVietnamPro',
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
