@@ -66,3 +66,7 @@ android/app/build/
 
 # Linux
 **/linux/flutter/ephemeral/
+
+# Environment variables
+.env
+*.env

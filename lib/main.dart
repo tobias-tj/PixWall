@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pix_wall/admin/admin_login.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:uploadthing/uploadthing.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final uploadThing = UploadThing(
-      'sk_live_5c7fda7f22084eb548eb251efabb49aad2ad8ee992593a878fde18e9d299a2ad');
+  // Carga las variables del archivo .env
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
   runApp(const MyApp());
 }

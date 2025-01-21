@@ -1,14 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pix_wall/services/database.dart';
 import 'package:random_string/random_string.dart';
 import 'package:uploadthing/uploadthing.dart';
-
-final uploadThing = UploadThing(
-    'sk_live_5c7fda7f22084eb548eb251efabb49aad2ad8ee992593a878fde18e9d299a2ad');
 
 class AddWallpaper extends StatefulWidget {
   const AddWallpaper({super.key});
@@ -18,6 +16,8 @@ class AddWallpaper extends StatefulWidget {
 }
 
 class _AddWallpaperState extends State<AddWallpaper> {
+  final uploadThing = UploadThing(dotenv.env['UPLOADTHING_SECRET']!);
+
   final List<String> categoryItems = [
     'Ocean',
     'Mountains',
