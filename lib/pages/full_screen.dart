@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class FullScreen extends StatefulWidget {
   String imagePath;
@@ -51,7 +55,9 @@ class _FullScreenState extends State<FullScreen> {
                 Stack(
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _save();
+                      },
                       child: Container(
                         height: 70,
                         width: MediaQuery.of(context).size.width / 1.7,
@@ -104,5 +110,15 @@ class _FullScreenState extends State<FullScreen> {
         ],
       ),
     );
+  }
+
+  _save() async {
+    var response = await Dio().get(widget.imagePath,
+        options: Options(responseType: ResponseType.bytes));
+    final result =
+        await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
+
+    print(result);
+    Navigator.pop(context);
   }
 }
