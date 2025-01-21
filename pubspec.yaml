@@ -36,9 +36,11 @@ dependencies:
   firebase_core: ^3.10.0
   flutter:
     sdk: flutter
+  fluttertoast: ^8.2.10
   image_picker: ^1.1.2
   random_string: ^2.3.1
   smooth_page_indicator: ^1.2.0+3
+  uploadthing: ^1.0.3
 
 dev_dependencies:
   flutter_lints: ^5.0.0

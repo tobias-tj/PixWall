@@ -1,7 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pix_wall/services/database.dart';
+import 'package:random_string/random_string.dart';
+import 'package:uploadthing/uploadthing.dart';
+
+final uploadThing = UploadThing(
+    'sk_live_5c7fda7f22084eb548eb251efabb49aad2ad8ee992593a878fde18e9d299a2ad');
 
 class AddWallpaper extends StatefulWidget {
   const AddWallpaper({super.key});
@@ -27,6 +34,65 @@ class _AddWallpaperState extends State<AddWallpaper> {
     selectedImage = File(image!.path);
 
     setState(() {});
+  }
+
+  Future<void> uploadItem() async {
+    if (selectedImage != null) {
+      try {
+        // Llama al método `uploadFiles` de la librería uploadthing
+        await uploadThing.uploadFiles([selectedImage!]);
+
+        if (uploadThing.uploadedFilesData.isNotEmpty) {
+          // Obtiene la URL de la imagen subida
+          final String downloadUrl =
+              uploadThing.uploadedFilesData.first['url'] as String;
+
+          // Genera un ID aleatorio
+          String addId = randomAlphaNumeric(10);
+
+          // Crea el mapa para la base de datos
+          Map<String, dynamic> addItem = {
+            "Image": downloadUrl,
+            "Id": addId,
+          };
+
+          // Agrega el wallpaper a la base de datos
+          await DatabaseMethods().addWallpaper(addItem, addId, value!);
+
+          // Muestra un mensaje de éxito
+          Fluttertoast.showToast(
+            msg: "Wallpaper has been added successfully!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else {
+          throw Exception('Failed to upload image.');
+        }
+      } catch (e) {
+        // Manejo de errores
+        Fluttertoast.showToast(
+          msg: "Failed to upload image: $e",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    } else {
+      // Si no hay imagen seleccionada
+      Fluttertoast.showToast(
+        msg: "Please select an image first!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.orange,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
   }
 
   @override
@@ -129,7 +195,9 @@ class _AddWallpaperState extends State<AddWallpaper> {
               height: 35.0,
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                uploadItem();
+              },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12.0),
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
