@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:pix_wall/admin/admin_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pix_wall/bottom_nav.dart';
-import 'package:pix_wall/pages/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

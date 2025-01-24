@@ -1,9 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pix_wall/models/photo_models.dart';
+import 'package:pix_wall/services/pexel.dart';
 import 'package:pix_wall/widget/search_widget.dart';
 
 class Search extends StatefulWidget {
@@ -17,31 +14,14 @@ class _SearchState extends State<Search> {
   List<PhotoModels> photos = [];
   TextEditingController searchController = TextEditingController();
   bool search = false;
-  Dio dio = Dio();
 
-  getSearchWallpaper(String query) async {
-    const String apiKey =
-        'MpngUMCUKGhzjvGwun9XSy3v12hde8AskaJSALFhrigxeSwG2qY6mn4L';
-    try {
-      Response response = await dio.get(
-        'https://api.pexels.com/v1/search?query=$query&per_page=30',
-        options: Options(headers: {HttpHeaders.authorizationHeader: apiKey}),
-      );
+  final PexelsService pexelsService = PexelsService();
 
-      Map<String, dynamic> jsonData = response.data;
-
-      // Itera sobre las fotos y construye los objetos.
-      jsonData["photos"].forEach((element) {
-        PhotoModels photoModels = PhotoModels.fromMap(element);
-        photos.add(photoModels);
-      });
-
-      setState(() {
-        search = true;
-      });
-    } catch (e) {
-      print('Error fetching wallpapers: $e');
-    }
+  Future<void> getSearchWallpaper(String query) async {
+    photos = await pexelsService.fetchPhotos(query);
+    setState(() {
+      search = true;
+    });
   }
 
   @override
