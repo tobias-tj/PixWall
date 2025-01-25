@@ -24,7 +24,6 @@ Widget searchWidget(List<PhotoModels> listPhotos, BuildContext context) {
           child: Hero(
             tag: photoModels.src!.portrait!,
             child: Container(
-              color: Colors.blue,
               child: Image.network(
                 photoModels.src!.portrait!,
                 fit: BoxFit.cover,

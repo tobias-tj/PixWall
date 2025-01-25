@@ -25,4 +25,28 @@ class PexelsService {
     }
     return photos;
   }
+
+  Future<List<PhotoModels>> fetchRandomPhotos() async {
+    List<PhotoModels> photos = [];
+    try {
+      // Llama al endpoint de fotos populares
+      Response response = await dio.get(
+        'https://api.pexels.com/v1/curated?per_page=50',
+        options: Options(headers: {HttpHeaders.authorizationHeader: apiKey}),
+      );
+
+      // Parsear los datos de la respuesta a modelos de fotos
+      Map<String, dynamic> jsonData = response.data;
+      jsonData["photos"].forEach((element) {
+        photos.add(PhotoModels.fromMap(element));
+      });
+
+      // Seleccionar aleatoriamente un subconjunto de fotos
+      photos.shuffle(); // Mezcla la lista
+      return photos.take(5).toList(); // Devuelve 5 fotos aleatorias
+    } catch (e) {
+      print('Error fetching random photos: $e');
+    }
+    return photos;
+  }
 }

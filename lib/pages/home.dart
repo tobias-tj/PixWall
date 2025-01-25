@@ -1,5 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:pix_wall/models/photo_models.dart';
+import 'package:pix_wall/pages/full_screen.dart';
+import 'package:pix_wall/services/pexel.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Home extends StatefulWidget {
@@ -10,95 +13,146 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List wallpaperImage = [
-    "images/wallpaper1.jpg",
-    "images/wallpaper2.jpg",
-    "images/wallpaper3.jpg"
-  ];
+  List<String> wallpaperImage = [];
+  int activeIndex = 0;
+  bool isLoading = true; // Estado de carga
+  final PexelsService pexelsService = PexelsService();
 
-  int activeindex = 0;
+  @override
+  void initState() {
+    super.initState();
+    fetchWallpapers();
+  }
+
+  Future<void> fetchWallpapers() async {
+    try {
+      List<PhotoModels> photos = await pexelsService.fetchRandomPhotos();
+      setState(() {
+        wallpaperImage =
+            photos.map((photo) => photo.src?.large ?? '').take(5).toList();
+        isLoading = false; // Termina la carga
+      });
+    } catch (e) {
+      print('Error fetching wallpapers: $e');
+      setState(() {
+        isLoading =
+            false; // Finaliza el estado de carga incluso en caso de error
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Material(
-                  elevation: 5.0,
-                  borderRadius: BorderRadius.circular(60),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(60),
-                      child: Image.asset(
-                        "images/iconUser.png",
-                        height: 50,
-                        width: 50,
-                        fit: BoxFit.cover,
+        margin: const EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(), // Indicador de carga
+              )
+            : Column(
+                children: [
+                  Row(
+                    children: [
+                      Material(
+                        elevation: 5.0,
+                        borderRadius: BorderRadius.circular(60),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: Image.asset(
+                              "images/iconUser.png",
+                              height: 50,
+                              width: 50,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
+                      SizedBox(width: 80),
+                      const Text(
+                        "Wallify",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 28.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'BeVietnamPro'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30.0),
+                  // Mostrar CarouselSlider con las imágenes cargadas
+                  CarouselSlider.builder(
+                    itemCount: wallpaperImage.length,
+                    itemBuilder: (context, index, realIndex) {
+                      final res = wallpaperImage[index];
+                      return buildImage(res);
+                    },
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      height: MediaQuery.of(context).size.height / 1.5,
+                      enlargeCenterPage: true,
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          activeIndex = index;
+                        });
+                      },
                     ),
                   ),
-                ),
-                SizedBox(width: 80.0),
-                Text(
-                  "Wallify",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'BeVietnamPro'),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            CarouselSlider.builder(
-                itemCount: wallpaperImage.length,
-                itemBuilder: (context, index, realIndex) {
-                  final res = wallpaperImage[index];
-                  return buildImage(res, index);
-                },
-                options: CarouselOptions(
-                    autoPlay: true,
-                    height: MediaQuery.of(context).size.height / 1.5,
-                    enlargeCenterPage: true,
-                    enlargeStrategy: CenterPageEnlargeStrategy.height,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        activeindex = index;
-                      });
-                    })),
-            SizedBox(height: 20.0),
-            Center(
-              child: buildIndicator(),
-            )
-          ],
-        ),
+                  const SizedBox(height: 20.0),
+                  Center(
+                    child: buildIndicator(),
+                  ),
+                ],
+              ),
       ),
     );
   }
 
   Widget buildIndicator() => AnimatedSmoothIndicator(
-        activeIndex: activeindex,
-        count: 3,
-        effect: JumpingDotEffect(
-            dotWidth: 15, dotHeight: 15, activeDotColor: Colors.blue),
+        activeIndex: activeIndex,
+        count: wallpaperImage.length,
+        effect: const JumpingDotEffect(
+          dotWidth: 15,
+          dotHeight: 15,
+          activeDotColor: Colors.blue,
+        ),
       );
 
-  Widget buildImage(String urlImage, int index) => Container(
-        margin: EdgeInsets.only(right: 10.0),
+  Widget buildImage(String urlImage) => Container(
+        margin: const EdgeInsets.only(right: 10.0),
         height: MediaQuery.of(context).size.height / 1.5,
         width: MediaQuery.of(context).size.width,
-        child: ClipRRect(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FullScreen(imagePath: urlImage),
+              ),
+            );
+          },
+          child: ClipRRect(
             borderRadius: BorderRadius.circular(35),
-            child: Image.asset(
+            child: Image.network(
               urlImage,
               fit: BoxFit.cover,
-            )),
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const Center(
+                  child:
+                      CircularProgressIndicator(), // Indicador de carga individual
+                );
+              },
+              errorBuilder: (context, error, stackTrace) => const Icon(
+                Icons.broken_image,
+                size: 100,
+                color: Colors.red,
+              ),
+            ),
+          ),
+        ),
       );
 }

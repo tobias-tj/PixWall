@@ -1,7 +1,7 @@
 import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class FullScreen extends StatefulWidget {
@@ -13,6 +13,8 @@ class FullScreen extends StatefulWidget {
 }
 
 class _FullScreenState extends State<FullScreen> {
+  bool _isSaving = false; // Para indicar si se está guardando
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,9 +57,9 @@ class _FullScreenState extends State<FullScreen> {
                 Stack(
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        _save();
-                      },
+                      onTap: _isSaving
+                          ? null
+                          : _save, // Deshabilitar durante guardado
                       child: Container(
                         height: 70,
                         width: MediaQuery.of(context).size.width / 1.7,
@@ -86,7 +88,21 @@ class _FullScreenState extends State<FullScreen> {
                           ],
                         ),
                       ),
-                    )
+                    ),
+                    if (_isSaving) // Mostrar indicador de carga
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
                 SizedBox(
@@ -113,12 +129,41 @@ class _FullScreenState extends State<FullScreen> {
   }
 
   _save() async {
-    var response = await Dio().get(widget.imagePath,
-        options: Options(responseType: ResponseType.bytes));
-    final result =
-        await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
+    setState(() {
+      _isSaving = true; // Indicar que la imagen está siendo guardada
+    });
 
-    print(result);
-    Navigator.pop(context);
+    try {
+      var response = await Dio().get(widget.imagePath,
+          options: Options(responseType: ResponseType.bytes));
+      final result =
+          await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
+
+      setState(() {
+        _isSaving = false; // Finalizar el estado de guardado
+      });
+
+      Fluttertoast.showToast(
+        msg: "Image saved successfully!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+      );
+
+      Navigator.pop(context);
+    } catch (e) {
+      setState(() {
+        _isSaving = false; // Finalizar el estado de guardado
+      });
+
+      Fluttertoast.showToast(
+        msg: "Failed to save image!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 }
