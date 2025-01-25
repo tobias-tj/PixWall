@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:pix_wall/admin/home_admin.dart';
+import 'package:pix_wall/bottom_nav.dart';
 import 'package:pix_wall/services/auth_service.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-class AdminLogin extends StatefulWidget {
-  const AdminLogin({super.key});
+class UserRegister extends StatefulWidget {
+  const UserRegister({super.key});
 
   @override
-  State<AdminLogin> createState() => _AdminLoginState();
+  State<UserRegister> createState() => _UserRegisterState();
 }
 
-class _AdminLoginState extends State<AdminLogin> {
+class _UserRegisterState extends State<UserRegister> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController userPasswordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController birthdateController = TextEditingController();
 
   final AuthService authService = AuthService();
 
@@ -23,9 +24,18 @@ class _AdminLoginState extends State<AdminLogin> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_new_outlined,
+            color: const Color.fromARGB(255, 14, 14, 14),
+          ),
+        ),
         centerTitle: true,
         title: const Text(
-          'Start With Admin',
+          'Register',
           style: TextStyle(
             color: Colors.black,
             fontSize: 28.0,
@@ -38,14 +48,14 @@ class _AdminLoginState extends State<AdminLogin> {
       body: Container(
         child: Stack(
           children: [
-            _buildLoginForm(),
+            _buildRegisterForm(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildLoginForm() {
+  Widget _buildRegisterForm() {
     return Container(
       margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 60.0),
       child: Form(
@@ -57,7 +67,7 @@ class _AdminLoginState extends State<AdminLogin> {
               elevation: 3.0,
               borderRadius: BorderRadius.circular(20),
               child: Container(
-                height: MediaQuery.of(context).size.height / 2.2,
+                height: MediaQuery.of(context).size.height / 1.5,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
@@ -65,10 +75,12 @@ class _AdminLoginState extends State<AdminLogin> {
                   children: [
                     SizedBox(height: 50.0),
                     _buildUsernameField(),
+                    SizedBox(height: 20.0),
+                    _buildEmailField(),
                     SizedBox(height: 30.0),
                     _buildPasswordField(),
                     SizedBox(height: 40.0),
-                    _buildLoginButton(),
+                    _buildRegisterButton(),
                   ],
                 ),
               ),
@@ -104,6 +116,18 @@ class _AdminLoginState extends State<AdminLogin> {
     );
   }
 
+  Widget _buildEmailField() {
+    return _buildTextField(
+      controller: emailController,
+      hint: 'Email',
+      validator: (value) {
+        if (value == null || value.isEmpty || !value.contains('@')) {
+          return 'Please enter a valid email address';
+        }
+      },
+    );
+  }
+
   Widget _buildTextField(
       {required TextEditingController controller,
       required String hint,
@@ -131,9 +155,9 @@ class _AdminLoginState extends State<AdminLogin> {
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildRegisterButton() {
     return GestureDetector(
-      onTap: loginAdmin,
+      onTap: registerUser,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12.0),
         margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -142,7 +166,7 @@ class _AdminLoginState extends State<AdminLogin> {
             color: Colors.black, borderRadius: BorderRadius.circular(12.0)),
         child: Center(
           child: Text(
-            'Login',
+            'Register',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,
@@ -153,32 +177,38 @@ class _AdminLoginState extends State<AdminLogin> {
     );
   }
 
-  void loginAdmin() async {
+  void registerUser() async {
     if (_formKey.currentState?.validate() ?? false) {
       try {
-        bool isSuccess = await authService.loginAdmin(
-            usernameController.text.trim(), userPasswordController.text.trim());
+        bool isSuccess = await authService.registerUser(
+            usernameController.text.trim(),
+            userPasswordController.text.trim(),
+            emailController.text.trim());
         if (isSuccess) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeAdmin()),
+            MaterialPageRoute(
+                builder: (context) =>
+                    BottomNav()), // Asegúrate de tener esta página
           );
         } else {
-          _showErrorToast('Invalid username or password');
+          _showErrorSnackBar('Registration failed');
         }
       } catch (e) {
-        _showErrorToast('An error occurred: $e');
+        _showErrorSnackBar('An error occurred: $e');
       }
     }
   }
 
-  void _showErrorToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      backgroundColor: Colors.orangeAccent,
-      textColor: Colors.white,
-      fontSize: 18.0,
-      gravity: ToastGravity.BOTTOM,
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.orangeAccent,
+        content: Text(
+          message,
+          style: TextStyle(fontSize: 18.0),
+        ),
+      ),
     );
   }
 }

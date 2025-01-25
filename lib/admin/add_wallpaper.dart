@@ -17,7 +17,6 @@ class AddWallpaper extends StatefulWidget {
 
 class _AddWallpaperState extends State<AddWallpaper> {
   final uploadThing = UploadThing(dotenv.env['UPLOADTHING_SECRET']!);
-
   final List<String> categoryItems = [
     'Ocean',
     'Mountains',
@@ -28,38 +27,43 @@ class _AddWallpaperState extends State<AddWallpaper> {
   final ImagePicker _picker = ImagePicker();
   File? selectedImage;
 
-  Future getImage() async {
+  bool _isMounted = true; // Variable para verificar si el widget sigue montado
+
+  @override
+  void dispose() {
+    _isMounted = false; // Marca el widget como no montado
+    super.dispose();
+  }
+
+  Future<void> getImage() async {
     var image = await _picker.pickImage(source: ImageSource.gallery);
+    if (!_isMounted) return; // Verifica si el widget sigue montado
 
-    selectedImage = File(image!.path);
-
-    setState(() {});
+    setState(() {
+      if (image != null) {
+        selectedImage = File(image.path);
+      }
+    });
   }
 
   Future<void> uploadItem() async {
     if (selectedImage != null) {
       try {
-        // Llama al método `uploadFiles` de la librería uploadthing
         await uploadThing.uploadFiles([selectedImage!]);
 
         if (uploadThing.uploadedFilesData.isNotEmpty) {
-          // Obtiene la URL de la imagen subida
           final String downloadUrl =
               uploadThing.uploadedFilesData.first['url'] as String;
-
-          // Genera un ID aleatorio
           String addId = randomAlphaNumeric(10);
 
-          // Crea el mapa para la base de datos
           Map<String, dynamic> addItem = {
             "Image": downloadUrl,
             "Id": addId,
           };
 
-          // Agrega el wallpaper a la base de datos
           await DatabaseMethods().addWallpaper(addItem, addId, value!);
 
-          // Muestra un mensaje de éxito
+          if (!_isMounted) return; // Verifica si el widget sigue montado
           Fluttertoast.showToast(
             msg: "Wallpaper has been added successfully!",
             toastLength: Toast.LENGTH_SHORT,
@@ -72,7 +76,7 @@ class _AddWallpaperState extends State<AddWallpaper> {
           throw Exception('Failed to upload image.');
         }
       } catch (e) {
-        // Manejo de errores
+        if (!_isMounted) return; // Verifica si el widget sigue montado
         Fluttertoast.showToast(
           msg: "Failed to upload image: $e",
           toastLength: Toast.LENGTH_LONG,
@@ -83,7 +87,7 @@ class _AddWallpaperState extends State<AddWallpaper> {
         );
       }
     } else {
-      // Si no hay imagen seleccionada
+      if (!_isMounted) return; // Verifica si el widget sigue montado
       Fluttertoast.showToast(
         msg: "Please select an image first!",
         toastLength: Toast.LENGTH_SHORT,
@@ -118,14 +122,10 @@ class _AddWallpaperState extends State<AddWallpaper> {
       body: Container(
         child: Column(
           children: [
-            SizedBox(
-              height: 20.0,
-            ),
+            SizedBox(height: 20.0),
             selectedImage == null
                 ? GestureDetector(
-                    onTap: () {
-                      getImage();
-                    },
+                    onTap: getImage, // Se llama directamente a getImage
                     child: Center(
                       child: Material(
                         elevation: 4.0,
@@ -150,19 +150,19 @@ class _AddWallpaperState extends State<AddWallpaper> {
                       elevation: 4.0,
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
-                          width: 250,
-                          height: 300,
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: Colors.black, width: 1.5),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.file(
-                              selectedImage!,
-                              fit: BoxFit.cover,
-                            ),
-                          )),
+                        width: 250,
+                        height: 300,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 1.5),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.file(
+                            selectedImage!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
             SizedBox(height: 40.0),
@@ -184,20 +184,18 @@ class _AddWallpaperState extends State<AddWallpaper> {
                           style: TextStyle(fontSize: 18.0, color: Colors.black),
                         )))
                     .toList(),
-                onChanged: ((value) => setState(() {
-                      this.value = value;
-                    })),
+                onChanged: (newValue) {
+                  setState(() {
+                    value = newValue;
+                  });
+                },
                 hint: Text('Select category'),
                 value: value,
               )),
             ),
-            SizedBox(
-              height: 35.0,
-            ),
+            SizedBox(height: 35.0),
             GestureDetector(
-              onTap: () {
-                uploadItem();
-              },
+              onTap: uploadItem,
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12.0),
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
