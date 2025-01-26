@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pix_wall/admin/home_admin.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pix_wall/services/auth_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -21,6 +21,15 @@ class _AdminLoginState extends State<AdminLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            context.go('/login');
+          },
+          child: Icon(
+            Icons.arrow_back_ios_new_outlined,
+            color: const Color.fromARGB(255, 1, 29, 38),
+          ),
+        ),
         elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -159,10 +168,7 @@ class _AdminLoginState extends State<AdminLogin> {
         bool isSuccess = await authService.loginAdmin(
             usernameController.text.trim(), userPasswordController.text.trim());
         if (isSuccess) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomeAdmin()),
-          );
+          context.go('/admin/home');
         } else {
           _showErrorToast('Invalid username or password');
         }

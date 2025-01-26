@@ -17,7 +17,6 @@ class _BottomNavState extends State<BottomNav> {
   late Categories categories;
   late Home home;
   late Search search;
-  late Widget currentPage;
 
   @override
   void initState() {
@@ -25,7 +24,6 @@ class _BottomNavState extends State<BottomNav> {
     search = Search();
     categories = Categories();
     pages = [home, search, categories];
-    currentPage = Home();
 
     super.initState();
   }
@@ -34,30 +32,24 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
-          buttonBackgroundColor: Colors.black,
-          backgroundColor: Colors.white,
-          height: 65,
-          color: Colors.grey,
-          animationDuration: Duration(milliseconds: 500),
-          onTap: (int index) {
-            setState(() {
-              currentTabIndex = index;
-            });
-          },
-          items: [
-            Icon(
-              Icons.home_outlined,
-              color: Colors.white,
-            ),
-            Icon(
-              Icons.search_outlined,
-              color: Colors.white,
-            ),
-            Icon(
-              Icons.category_outlined,
-              color: Colors.white,
-            )
-          ]),
+        index: currentTabIndex,
+        height: 60,
+        backgroundColor: Colors.white, // Fondo detrás del navbar
+        color: Colors.black, // Color del navbar
+        buttonBackgroundColor: Colors.grey.shade800, // Fondo del botón activo
+        animationDuration: const Duration(milliseconds: 300),
+        animationCurve: Curves.easeInOut,
+        items: const [
+          Icon(Icons.home_outlined, color: Colors.white, size: 30),
+          Icon(Icons.search_outlined, color: Colors.white, size: 30),
+          Icon(Icons.category_outlined, color: Colors.white, size: 30),
+        ],
+        onTap: (int index) {
+          setState(() {
+            currentTabIndex = index;
+          });
+        },
+      ),
       body: pages[currentTabIndex],
     );
   }

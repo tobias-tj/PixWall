@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pix_wall/admin/admin_login.dart';
 import 'package:pix_wall/bottom_nav.dart';
 import 'package:pix_wall/services/auth_service.dart';
@@ -115,10 +116,7 @@ class _UserLoginState extends State<UserLogin> {
   Widget _buildAdminLoginText() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AdminLogin()),
-        );
+        context.go('/admin/login');
       },
       child: Text(
         "Login as Admin",
@@ -134,10 +132,7 @@ class _UserLoginState extends State<UserLogin> {
   Widget _buildRegisterButton() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => UserRegister()),
-        );
+        context.go('/register');
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -191,10 +186,7 @@ class _UserLoginState extends State<UserLogin> {
           userPasswordController.text.trim(),
         );
         if (isSuccess) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => BottomNav()),
-          );
+          context.go('/user/home');
         } else {
           _showToast('Invalid username or password');
         }

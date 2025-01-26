@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pix_wall/admin/add_wallpaper.dart';
+import 'package:pix_wall/go_router.dart';
 
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({super.key});
@@ -62,9 +64,7 @@ class _HomeAdminState extends State<HomeAdmin> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Route route =
-                        MaterialPageRoute(builder: (context) => AddWallpaper());
-                    Navigator.push(context, route);
+                    context.go('/admin/addWallpaper');
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -85,8 +85,9 @@ class _HomeAdminState extends State<HomeAdmin> {
                 ),
                 const SizedBox(height: 20.0),
                 OutlinedButton(
-                  onPressed: () {
-                    // Lógica para cerrar sesión
+                  onPressed: () async {
+                    await authService.logout();
+                    context.go('/login');
                   },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.grey.shade800, width: 2),

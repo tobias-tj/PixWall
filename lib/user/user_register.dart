@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pix_wall/bottom_nav.dart';
 import 'package:pix_wall/services/auth_service.dart';
 
@@ -26,7 +27,7 @@ class _UserRegisterState extends State<UserRegister> {
         backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            context.go('/login');
           },
           child: Icon(
             Icons.arrow_back_ios_new_outlined,
@@ -185,12 +186,7 @@ class _UserRegisterState extends State<UserRegister> {
             userPasswordController.text.trim(),
             emailController.text.trim());
         if (isSuccess) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    BottomNav()), // Asegúrate de tener esta página
-          );
+          context.go('/login');
         } else {
           _showErrorSnackBar('Registration failed');
         }

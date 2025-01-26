@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pix_wall/go_router.dart';
 import 'package:pix_wall/models/photo_models.dart';
 import 'package:pix_wall/pages/full_screen.dart';
 import 'package:pix_wall/services/pexel.dart';
@@ -58,11 +60,43 @@ class _HomeState extends State<Home> {
                         elevation: 5.0,
                         borderRadius: BorderRadius.circular(60),
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            // Mostrar cuadro de diálogo de confirmación
+                            final shouldLogout = await showDialog<bool>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Confirmación"),
+                                    content: const Text(
+                                        "¿Estás seguro de que deseas cerrar sesión?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(false); // Cancelar
+                                        },
+                                        child: const Text("Cancelar"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(true); // Confirmar
+                                        },
+                                        child: const Text("Cerrar sesión"),
+                                      ),
+                                    ],
+                                  );
+                                });
+                            // Si el usuario confirmó, ejecutar logout
+                            if (shouldLogout == true) {
+                              await authService.logout();
+                              context.go('/login');
+                            }
+                          },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: Image.asset(
-                              "images/iconUser.png",
+                              "images/closeSession.png",
                               height: 50,
                               width: 50,
                               fit: BoxFit.cover,

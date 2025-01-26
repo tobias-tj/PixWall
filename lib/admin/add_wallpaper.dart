@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pix_wall/services/database.dart';
 import 'package:random_string/random_string.dart';
@@ -105,7 +106,7 @@ class _AddWallpaperState extends State<AddWallpaper> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            context.go('/admin/home');
           },
           child: Icon(
             Icons.arrow_back_ios_new_outlined,
