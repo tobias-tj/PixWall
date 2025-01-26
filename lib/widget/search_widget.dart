@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pix_wall/models/photo_models.dart';
 import 'package:pix_wall/pages/full_screen.dart';
 
@@ -15,11 +16,7 @@ Widget searchWidget(List<PhotoModels> listPhotos, BuildContext context) {
         return GridTile(
             child: GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        FullScreen(imagePath: photoModels.src!.portrait!)));
+            context.push('/fullscreen', extra: photoModels.src!.portrait!);
           },
           child: Hero(
             tag: photoModels.src!.portrait!,

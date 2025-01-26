@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class FullScreen extends StatefulWidget {
@@ -110,7 +111,7 @@ class _FullScreenState extends State<FullScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   child: Text(
                     "Cancel",
@@ -151,7 +152,7 @@ class _FullScreenState extends State<FullScreen> {
         textColor: Colors.white,
       );
 
-      Navigator.pop(context);
+      context.pop();
     } catch (e) {
       setState(() {
         _isSaving = false; // Finalizar el estado de guardado

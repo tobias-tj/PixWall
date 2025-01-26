@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pix_wall/pages/full_screen.dart';
 import 'package:pix_wall/services/database.dart';
 
@@ -49,12 +50,7 @@ class _AllWallpaperState extends State<AllWallpaper> {
             DocumentSnapshot ds = snapshot.data.docs[index];
             return GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FullScreen(imagePath: ds["Image"]),
-                  ),
-                );
+                context.push('/fullscreen', extra: ds["Image"]);
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),

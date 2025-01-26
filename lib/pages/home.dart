@@ -161,12 +161,7 @@ class _HomeState extends State<Home> {
         width: MediaQuery.of(context).size.width,
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FullScreen(imagePath: urlImage),
-              ),
-            );
+            context.push('/fullscreen', extra: urlImage);
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(35),

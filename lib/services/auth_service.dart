@@ -57,6 +57,19 @@ class AuthService {
     }
   }
 
+  // Verificar si el username está disponible
+  Future<bool> isUsernameAvailable(String username) async {
+    try {
+      var query = await FirebaseFirestore.instance
+          .collection("Users")
+          .where('id', isEqualTo: username)
+          .get();
+      return query.docs.isEmpty; // Retorna true si no se encuentra el username
+    } catch (e) {
+      throw Exception('Error checking username availability: $e');
+    }
+  }
+
   // Cerrar sesión
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
