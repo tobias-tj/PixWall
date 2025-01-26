@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:saver_gallery/saver_gallery.dart';
 
 class FullScreen extends StatefulWidget {
   String imagePath;
@@ -137,8 +137,10 @@ class _FullScreenState extends State<FullScreen> {
     try {
       var response = await Dio().get(widget.imagePath,
           options: Options(responseType: ResponseType.bytes));
-      final result =
-          await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
+      final result = await SaverGallery.saveImage(
+          Uint8List.fromList(response.data),
+          fileName: '',
+          skipIfExists: false);
 
       setState(() {
         _isSaving = false; // Finalizar el estado de guardado
